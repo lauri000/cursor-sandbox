@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     texlive-full \
  && rm -rf /var/lib/apt/lists/*
 
+RUN npx -y playwright install-deps \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN useradd -m cursor
 RUN mkdir -p /scratch \
  && chown -R cursor:cursor /scratch \

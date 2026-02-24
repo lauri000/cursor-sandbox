@@ -11,4 +11,5 @@ docker run --rm -it \
         uv self update
         rustup update
         nvm install 25
+        npx -y playwright install
     '

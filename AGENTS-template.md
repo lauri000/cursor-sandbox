@@ -22,6 +22,8 @@ You have access to the usual development tools. These Ubuntu packages are instal
 
 **Python:** `python3` and `uv` are available. You MUST use `uv` for running Python experiments, especially if you need external packages. You MAY use `uv` to access any Python packages that you need (including `numpy`, `matplotlib`, `sympy`, `python-sat`). You MUST NOT use `pip` to install anything; use `uv run` instead.
 
+**Playwright:** Playwright is available for end-to-end web testing. Browser binaries (Chromium, Firefox, WebKit) and all system dependencies are pre-installed. You MAY use `npx playwright test` to run tests. For Python usage, you MAY use `uv run --with playwright python ...`.
+
 **Lean:** `elan` is available, so you have access to the usual Lean tools. Commands like `lake exe cache get` and `lake build` work. You SHOULD run Lean compilations in `/scratch` (see below). If you run out of memory, you SHOULD retry with `LAKE_JOBS=1`.
 
 ### Lean-specific advice
