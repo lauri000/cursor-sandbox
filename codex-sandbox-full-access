@@ -6,10 +6,10 @@ docker_args=(
     --rm
     -it
     --mount "type=volume,source=cursor-sandbox-home,target=/home/cursor"
-    # Keep Rust build artifacts off the bind mount for much faster linking/build IO.
-    --mount "type=volume,source=cursor-sandbox-cargo-target,target=/home/cursor/.cargo-target"
     --mount "type=bind,source=.,target=/workspace"
-    -e "CARGO_TARGET_DIR=/home/cursor/.cargo-target"
+    # Nested volume mount keeps target/ fast while remaining inside /workspace for agent write sandboxing.
+    --mount "type=volume,source=cursor-sandbox-cargo-target,target=/workspace/.cargo-target"
+    -e "CARGO_TARGET_DIR=/workspace/.cargo-target"
     -w /workspace
 )
 
