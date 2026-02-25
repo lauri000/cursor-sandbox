@@ -1,9 +1,31 @@
 #!/bin/bash
 
-docker run --rm -it \
-    --mount "type=volume,source=cursor-sandbox-home,target=/home/cursor" \
-    --mount "type=bind,source=.,target=/workspace" \
-    -w /workspace \
+set -euo pipefail
+
+docker_args=(
+    --rm
+    -it
+    --mount "type=volume,source=cursor-sandbox-home,target=/home/cursor"
+    # Keep Rust build artifacts off the bind mount for much faster linking/build IO.
+    --mount "type=volume,source=cursor-sandbox-cargo-target,target=/home/cursor/.cargo-target"
+    --mount "type=bind,source=.,target=/workspace"
+    -e "CARGO_TARGET_DIR=/home/cursor/.cargo-target"
+    -w /workspace
+)
+
+if [[ -n "${SANDBOX_CPUS:-}" ]]; then
+    docker_args+=(--cpus "${SANDBOX_CPUS}")
+fi
+
+if [[ -n "${SANDBOX_MEMORY:-}" ]]; then
+    docker_args+=(--memory "${SANDBOX_MEMORY}")
+fi
+
+if [[ -n "${SANDBOX_MEMORY_SWAP:-}" ]]; then
+    docker_args+=(--memory-swap "${SANDBOX_MEMORY_SWAP}")
+fi
+
+docker run "${docker_args[@]}" \
     "cursor-agent-sandbox" \
     bash -l
 
